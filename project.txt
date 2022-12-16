@@ -1,0 +1,29 @@
+# 주피터노트북으로 실행
+
+import pandas as pd
+import folium
+import numpy as np
+
+charger_data = pd.read_csv('charger_dataset.csv', encoding='CP949')
+support_center_data = pd.read_csv('support_center_dataset.csv', encoding = 'CP949')
+
+tp = charger_data.loc[:,['위도','경도']]
+
+index=[]
+for i in range(charger_data.shape[0]):
+    str=""
+    str += charger_data.iloc[i,0] + '<br/><br/>'
+    str += "설치장소 : " + charger_data.iloc[0,8] + '<br/>'
+    str += "평일 운영 시간 : " + charger_data.iloc[0,9] + '~' +charger_data.iloc[0,10] + '<br/>'
+    str += "휴일 운영 시간 : " + charger_data.iloc[0,11] + '~' +charger_data.iloc[0,12] + '<br/>'
+    index.append(str)
+
+location = [37.4729081,127.039306]
+map_osm = folium.Map(location=location, zoom_start=14,width=750,height=500)
+folium.Marker(location=location, tooltip = "내위치",icon=folium.Icon(color='red',icon='star')).add_to(map_osm)
+
+for i in range(tp.shape[0]):
+    if np.isnan(tp.iloc[i,0]) == False and  np.isnan(tp.iloc[i,1]) == False:
+        folium.Marker(location=[tp.iloc[i,0],tp.iloc[i,1]], popup=folium.Popup(index[i], min_width=150, max_width=300)).add_to(map_osm)
+        
+map_osm
