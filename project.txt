@@ -5,7 +5,6 @@ import folium
 import numpy as np
 
 charger_data = pd.read_csv('charger_dataset.csv', encoding='CP949')
-support_center_data = pd.read_csv('support_center_dataset.csv', encoding = 'CP949')
 
 tp = charger_data.loc[:,['위도','경도']]
 
